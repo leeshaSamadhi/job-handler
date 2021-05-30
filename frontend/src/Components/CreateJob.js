@@ -75,6 +75,7 @@ class CreateJob extends React.Component {
       .catch((err) => {
         this.setState({ ...this.state, rerender: true });
         console.log(err);
+        alert("something wrong!")
       });
 
   }
