@@ -3,13 +3,10 @@ import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import AppNavBar from "./AppNavBar";
 import JobTable from "./JobTable";
-import CreateJobFooter from "./CreateJobFooter";
 import { Link } from "react-router-dom";
-import $ from 'jquery';
-
-
+import "./jobs.css";
+import $ from "jquery";
 
 class CreateJob extends React.Component {
   constructor(props) {
@@ -19,22 +16,28 @@ class CreateJob extends React.Component {
       rerender: true,
       startDate: this.getMinDate(),
       salary: "",
-
     };
     this.onChange = this.props.onChange;
-
-
   }
 
-  handleInput(){
-    $('#skills,#salary,#description,#no_of_openings,#title,#full_part').on('input propertychange paste', function () {
-    if ($('#skills').val().length>0 && $('#salary').val().length>0 && $('#description').val().length>0 && $('#no_of_openings').val().length>0  && ($('#full_part:checked').val())) {
-        $('#job_status_accepted').prop('disabled', false);
-    } else {
-        $('#job_status_accepted').prop('disabled', true);
-        $('#job_status_accepted').prop('checked', false);
-    }
-});
+  handleInput() {
+    $("#skills,#salary,#description,#no_of_openings,#title,#full_part").on(
+      "input propertychange paste",
+      function () {
+        if (
+          $("#skills").val().length > 0 &&
+          $("#salary").val().length > 0 &&
+          $("#description").val().length > 0 &&
+          $("#no_of_openings").val().length > 0 &&
+          $("#full_part:checked").val()
+        ) {
+          $("#job_status_accepted").prop("disabled", false);
+        } else {
+          $("#job_status_accepted").prop("disabled", true);
+          $("#job_status_accepted").prop("checked", false);
+        }
+      }
+    );
   }
   setStartDate(date) {
     this.setState({
@@ -46,10 +49,10 @@ class CreateJob extends React.Component {
     this.setState({ ...this.state, rerender: false });
     e.preventDefault();
     let job_status;
-    if(!e.target.job_status_accepted.checked){
-      job_status = 'Pending'
-    }else{
-      job_status = "Accepted"
+    if (!e.target.job_status_accepted.checked) {
+      job_status = "Pending";
+    } else {
+      job_status = "Accepted";
     }
     const job = [
       [
@@ -65,7 +68,7 @@ class CreateJob extends React.Component {
     ];
     axios({
       method: "POST",
-      url: "http://localhost:3001/jobs",
+      url: "http://localhost:3001/jobs/jobs",
       data: job,
     })
       .then((response) => {
@@ -76,35 +79,30 @@ class CreateJob extends React.Component {
         this.setState({ ...this.state, rerender: true });
         console.log(err);
       });
-
   }
 
   handleModalShowHide() {
     this.setState({ showHide: !this.state.showHide });
   }
 
-  getMinDate(){
-    let today= new Date();
+  getMinDate() {
+    let today = new Date();
     let mindate = new Date();
     mindate.setDate(today.getDate() + 20);
-    return mindate
+    return mindate;
   }
-
-
 
   render() {
     const handleSubmit = this.handleSubmit.bind(this);
     const handleInput = this.handleInput.bind(this);
 
-
     return (
       <div>
-        <AppNavBar />
         <div className="button-container">
           <Button variant="danger" onClick={() => this.handleModalShowHide()}>
             Create New Job
           </Button>
-          <Link to={"/pendingJobs"}>
+          <Link to={"/hr/jobs/pendingJobs"}>
             <Button variant="success">View Pending Jobs</Button>
           </Link>
         </div>
@@ -185,9 +183,6 @@ class CreateJob extends React.Component {
                   onChange={this.handleInput}
                 />
               </div>
-
-
-
               <br />
               <div className="form-group">
                 <label htmlFor="no_of_openings">Number of Openings</label>
@@ -197,7 +192,7 @@ class CreateJob extends React.Component {
                   id="no_of_openings"
                   useref="no_of_openings"
                   min="1"
-                  required="true"
+                  required=""
                   onChange={this.handleInput}
                 />
               </div>
@@ -247,9 +242,7 @@ class CreateJob extends React.Component {
                 <button
                   className="btn btn-success"
                   type="submit"
-                 
-
-
+                  //onClick={() => this.handleModalShowHide()}
                 >
                   Create
                 </button>
@@ -260,14 +253,11 @@ class CreateJob extends React.Component {
             <Button
               variant="secondary"
               onClick={() => this.handleModalShowHide()}
-
             >
               Close
             </Button>
           </Modal.Footer>
         </Modal>
-
-        <CreateJobFooter />
       </div>
     );
   }
