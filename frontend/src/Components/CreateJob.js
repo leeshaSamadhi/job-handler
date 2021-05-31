@@ -154,7 +154,7 @@ class CreateJob extends React.Component {
               </div>
 
               <div className="form-group">
-                <label htmlFor="skills">Skills required</label>
+                <label htmlFor="skills">Skills</label>
                 <textarea
                   type="text"
                   className="form-control"
